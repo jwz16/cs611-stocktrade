@@ -3,7 +3,6 @@
 ## Build
 ### Prerequisites
 * JDK 17 installed.
-* Netbeans installed.
 
 ### Build & Run on Windows
 
@@ -16,6 +15,6 @@ cd scripts
 ### Build & Run on Linux
 ```
 cd scripts
-.\build.sh
-.\run.sh
+./build.sh
+./run.sh
 ```
