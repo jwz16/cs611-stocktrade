@@ -6,7 +6,8 @@ package edu.bu.cs611.portfoliostocksystem;
 
 import com.formdev.flatlaf.themes.FlatMacLightLaf;
 
-// import com.formdev.flatlaf.themes.FlatMacLightLaf;
+import edu.bu.cs611.portfoliostocksystem.customer_stock_trading_system.view.CustomerStockTradingViewFrame;
+import edu.bu.cs611.portfoliostocksystem.portfolio_manager.view.PortfolioMgrViewFrame;
 
 /**
  *
@@ -14,10 +15,19 @@ import com.formdev.flatlaf.themes.FlatMacLightLaf;
  */
 public class Main extends javax.swing.JFrame {
 
+    private static Main gInstance = null;
+
+    public static Main getInstance() {
+        if (gInstance == null) {
+            gInstance = new Main();
+        }
+        return gInstance;
+    }
+
     /**
      * Creates new form Main
      */
-    public Main() {
+    private Main() {
         initComponents();
     }
 
@@ -30,103 +40,73 @@ public class Main extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        labelHeadline = new javax.swing.JLabel();
-        btnSell = new javax.swing.JButton();
-        btnBuy = new javax.swing.JButton();
-        scrollPanelAvailableStocks = new javax.swing.JScrollPane();
-        tableAvailableStocks = new javax.swing.JTable();
-        labelAvailableStocks = new javax.swing.JLabel();
+        btnCxSignIn = new javax.swing.JButton();
+        btnCxSignUp = new javax.swing.JButton();
+        btnMgrSignIn = new javax.swing.JButton();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        setName("Main Frame"); // NOI18N
+        setResizable(false);
 
-        labelHeadline.setFont(new java.awt.Font("sansserif", 1, 36)); // NOI18N
-        labelHeadline.setText("Customer Stock Trading System");
-
-        btnSell.setText("SELL");
-        btnSell.addActionListener(this::btnSellActionPerformed);
-
-        btnBuy.setText("BUY");
-        btnBuy.addActionListener(this::btnBuyActionPerformed);
-
-        scrollPanelAvailableStocks.setName("Available Stocks"); // NOI18N
-
-        tableAvailableStocks.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-                {null, null, null}
-            },
-            new String [] {
-                "SYMBOL", "NAME", "PRICE"
-            }
-        ) {
-            Class[] types = new Class [] {
-                java.lang.String.class, java.lang.String.class, java.lang.Double.class
-            };
-            boolean[] canEdit = new boolean [] {
-                false, false, false
-            };
-
-            public Class getColumnClass(int columnIndex) {
-                return types [columnIndex];
-            }
-
-            public boolean isCellEditable(int rowIndex, int columnIndex) {
-                return canEdit [columnIndex];
+        btnCxSignIn.setText("Customer Sign In");
+        btnCxSignIn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnCxSignInActionPerformed(evt);
             }
         });
-        scrollPanelAvailableStocks.setViewportView(tableAvailableStocks);
 
-        labelAvailableStocks.setText("AVAILABLE STOCKS");
+        btnCxSignUp.setText("Customer Sign Up");
+
+        btnMgrSignIn.setText("Manager Sign In");
+        btnMgrSignIn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnMgrSignInActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(scrollPanelAvailableStocks, javax.swing.GroupLayout.DEFAULT_SIZE, 733, Short.MAX_VALUE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(btnBuy, javax.swing.GroupLayout.PREFERRED_SIZE, 116, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(btnSell, javax.swing.GroupLayout.PREFERRED_SIZE, 116, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(413, 413, 413))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(labelHeadline, javax.swing.GroupLayout.PREFERRED_SIZE, 565, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(labelAvailableStocks))
-                        .addGap(0, 0, Short.MAX_VALUE))))
+                .addGap(135, 135, 135)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(btnCxSignUp, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(btnCxSignIn, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(btnMgrSignIn, javax.swing.GroupLayout.PREFERRED_SIZE, 129, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(136, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(labelHeadline)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(178, 178, 178)
-                        .addComponent(btnBuy, javax.swing.GroupLayout.PREFERRED_SIZE, 51, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(btnSell, javax.swing.GroupLayout.PREFERRED_SIZE, 51, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(14, 14, 14)
-                        .addComponent(labelAvailableStocks)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(scrollPanelAvailableStocks, javax.swing.GroupLayout.PREFERRED_SIZE, 592, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(28, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addContainerGap(109, Short.MAX_VALUE)
+                .addComponent(btnCxSignIn)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(btnCxSignUp)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(btnMgrSignIn, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(104, 104, 104))
         );
 
         pack();
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
-    private void btnSellActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSellActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_btnSellActionPerformed
+    private void btnCxSignInActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCxSignInActionPerformed
+        java.awt.EventQueue.invokeLater(() -> {
+            Main.getInstance().setVisible(false);
+            Main.getInstance().dispose();
+            new CustomerStockTradingViewFrame().setVisible(true);
+        });
+    }//GEN-LAST:event_btnCxSignInActionPerformed
 
-    private void btnBuyActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuyActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_btnBuyActionPerformed
+    private void btnMgrSignInActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMgrSignInActionPerformed
+        java.awt.EventQueue.invokeLater(() -> {
+            Main.getInstance().setVisible(false);
+            Main.getInstance().dispose();
+            new PortfolioMgrViewFrame().setVisible(true);
+        });
+    }//GEN-LAST:event_btnMgrSignInActionPerformed
 
     /**
      * @param args the command line arguments
@@ -136,16 +116,13 @@ public class Main extends javax.swing.JFrame {
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(() -> {
-            new Main().setVisible(true);
+            Main.getInstance().setVisible(true);
         });
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton btnBuy;
-    private javax.swing.JButton btnSell;
-    private javax.swing.JLabel labelAvailableStocks;
-    private javax.swing.JLabel labelHeadline;
-    private javax.swing.JScrollPane scrollPanelAvailableStocks;
-    private javax.swing.JTable tableAvailableStocks;
+    private javax.swing.JButton btnCxSignIn;
+    private javax.swing.JButton btnCxSignUp;
+    private javax.swing.JButton btnMgrSignIn;
     // End of variables declaration//GEN-END:variables
 }
