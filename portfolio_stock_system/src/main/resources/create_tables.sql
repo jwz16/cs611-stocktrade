@@ -5,10 +5,10 @@ CREATE TABLE IF NOT EXISTS
         id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
         first_name VARCHAR(64) NOT NULL,
         last_name VARCHAR(64) NOT NULL,
-        username VARCHAR(32) NOT NULL,
+        username VARCHAR(32) NOT NULL UNIQUE,
         email VARCHAR(320) NOT NULL UNIQUE,
         date_of_birth CHAR(10) NOT NULL,
-        ssn INT NOT NULL,
+        ssn INT NOT NULL UNIQUE,
         customer_status CHAR(16) NOT NULL,
         password_hash TEXT NOT NULL
     );
@@ -18,7 +18,7 @@ CREATE TABLE IF NOT EXISTS
         id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
         first_name VARCHAR(64) NOT NULL,
         last_name VARCHAR(64) NOT NULL,
-        username VARCHAR(32) NOT NULL,
+        username VARCHAR(32) NOT NULL UNIQUE,
         email VARCHAR(320) NOT NULL UNIQUE,
         date_of_birth CHAR(10) NOT NULL,
         password_hash TEXT NOT NULL
