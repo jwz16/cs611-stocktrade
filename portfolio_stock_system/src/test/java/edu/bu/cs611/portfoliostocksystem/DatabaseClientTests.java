@@ -70,7 +70,14 @@ public class DatabaseClientTests {
   @Test
   @DisplayName("Test get database connection")
   void testGetDatabaseConnection() {
-    assertNotNull(DatabaseClient.getConnection(TEST_DB_URL, TEST_DB_USER, TEST_DB_PASS));
+    var conn = DatabaseClient.getConnection(TEST_DB_URL, TEST_DB_USER, TEST_DB_PASS);
+    assertNotNull(conn);
+
+    try {
+      conn.close();
+    } catch (SQLException e) {
+      assertTrue(false);
+    }
   }
 
   @Test

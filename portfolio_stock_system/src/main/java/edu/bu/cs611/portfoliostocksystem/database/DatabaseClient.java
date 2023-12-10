@@ -7,7 +7,6 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
 
 import org.apache.commons.io.IOUtils;
 import org.apache.logging.log4j.LogManager;
@@ -47,6 +46,7 @@ public class DatabaseClient {
 
   public static boolean initDatabase(String url, String user, String pass) {
     Connection conn = null;
+    boolean success = false;
     try {
       new File("data").mkdirs();
 
@@ -57,7 +57,7 @@ public class DatabaseClient {
         logger.info("The driver name is " + meta.getDriverName());
         logger.info("The new database is created.");
 
-        return initTables(url, user, pass);
+        success = initTables(url, user, pass);
       }
     } catch(SQLException e) {
       // if the error message is "out of memory",
@@ -73,7 +73,7 @@ public class DatabaseClient {
       }
     }
 
-    return false;
+    return success;
   }
 
   public static Connection getConnection(String url, String user, String pass) {
@@ -94,6 +94,7 @@ public class DatabaseClient {
     logger.info("Initializing database tables ...");
     
     Connection conn = null;
+    boolean success = false;
     try {
       conn = getConnection(url, user, pass);
       if (conn == null) {
@@ -112,7 +113,7 @@ public class DatabaseClient {
       var createTablesSql = IOUtils.toString(clsLoader.getResourceAsStream("create_tables.sql"), StandardCharsets.UTF_8);
       stmt.executeUpdate(createTablesSql);
 
-      return true;
+      success = true;
     } catch (SQLException e) {
       logger.error(e.getMessage());
     } catch (IOException e) {
@@ -127,7 +128,7 @@ public class DatabaseClient {
       }
     }
 
-    return false;
+    return success;
   }
 
   public static int executeUpdate(String sql) {
@@ -140,6 +141,7 @@ public class DatabaseClient {
 
   public static int executeUpdate(String sql, String url, String user, String pass) {
     Connection conn = null;
+    int affectedRows = 0;
     try {
       conn = getConnection(url, user, pass);
       if (conn == null) {
@@ -150,7 +152,7 @@ public class DatabaseClient {
       var stmt = conn.createStatement();
       stmt.setQueryTimeout(5);
 
-      return stmt.executeUpdate(sql);
+      affectedRows = stmt.executeUpdate(sql);
     } catch (SQLException e) {
       logger.error(e.getMessage());
     } finally {
@@ -163,11 +165,12 @@ public class DatabaseClient {
       }
     }
 
-    return 0;
+    return affectedRows;
   }
 
   public static boolean executeQuery(String sql, String url, String user, String pass, QueryResultSetHandler handler) {
     Connection conn = null;
+    boolean success = false;
     try {
       conn = getConnection(url, user, pass);
       if (conn == null) {
@@ -179,7 +182,7 @@ public class DatabaseClient {
       stmt.setQueryTimeout(5);
 
       handler.handleResultSet(stmt.executeQuery(sql));
-      return true;
+      success = true;
     } catch (SQLException e) {
       logger.error(e.getMessage());
     } finally {
@@ -192,7 +195,7 @@ public class DatabaseClient {
       }
     }
 
-    return false;
+    return success;
   }
 
 }
