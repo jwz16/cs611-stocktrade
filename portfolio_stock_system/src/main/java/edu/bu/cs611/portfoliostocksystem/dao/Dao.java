@@ -11,6 +11,7 @@ public interface Dao<T> {
   public boolean add(T t);
   public boolean update(T t);
   public boolean delete(T t);
+  public boolean deleteById(Integer id);
   public T getById(Integer id);
 
 }

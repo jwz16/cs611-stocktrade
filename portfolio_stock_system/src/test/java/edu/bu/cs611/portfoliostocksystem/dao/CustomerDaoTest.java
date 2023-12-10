@@ -1,9 +1,9 @@
 package edu.bu.cs611.portfoliostocksystem.dao;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-
-import java.sql.SQLException;
 
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
@@ -16,14 +16,15 @@ import edu.bu.cs611.portfoliostocksystem.model.Customer;
 
 public class CustomerDaoTest {
 
-  private static DatabaseClient dbClient;
+  private static CustomerDao cxDao;
   private static Customer testCustomer;
 
   @BeforeAll
   static void setup() {
     DatabaseClientTest.createTestDatabase();
 
-    dbClient = new DatabaseClient(true);
+    cxDao = new CustomerDao(new DatabaseClient(true));
+
     testCustomer = new Customer(
       -1,
       "John", "Anderson",
@@ -43,37 +44,55 @@ public class CustomerDaoTest {
 
   @Test
   void testAdd() {
-    var cxDao = new CustomerDao(dbClient);
     assertTrue(cxDao.add(testCustomer));
 
-    dbClient.executeQuery("SELECT id FROM customers WHERE id=" + testCustomer.getId(), rs -> {
-      try {
-        assertTrue(rs.next());
-        assertEquals(rs.getInt("id"), testCustomer.getId());
-      } catch (SQLException e) {
-        e.printStackTrace();
-      }
-    });
+    assertNotNull(cxDao.getById(testCustomer.getId()));
+    assertTrue(cxDao.delete(testCustomer));
   }
 
   @Test
   void testDelete() {
+    cxDao.add(testCustomer);
 
+    assertTrue(cxDao.delete(testCustomer));
+    assertNull(cxDao.getById(testCustomer.getId()));
   }
 
   @Test
   void testGetAll() {
+    testCustomer.setUsername("john001");
+    testCustomer.setEmail("john001@gmail.com");
+    cxDao.add(testCustomer);
+    Integer cxId1 = testCustomer.getId();
 
+    testCustomer.setUsername("john002");
+    testCustomer.setEmail("john002@gmail.com");
+    cxDao.add(testCustomer);
+    Integer cxId2 = testCustomer.getId();
+
+    assertEquals(cxDao.getAll().size(), 2);
+
+    assertTrue(cxDao.deleteById(cxId1));
+    assertTrue(cxDao.deleteById(cxId2));
   }
 
   @Test
   void testGetById() {
-
+    cxDao.add(testCustomer);
+    assertNotNull(cxDao.getById(testCustomer.getId()));
+    cxDao.delete(testCustomer);
   }
 
   @Test
   void testUpdate() {
+    testCustomer.setFirstName("John");
+    cxDao.add(testCustomer);
 
+    testCustomer.setFirstName("Michael");
+    cxDao.update(testCustomer);
+
+    assertEquals(cxDao.getById(testCustomer.getId()).getFirstName(), "Michael");
+    cxDao.delete(testCustomer);
   }
   
 }

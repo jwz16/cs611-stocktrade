@@ -32,7 +32,9 @@ public class CustomerDao implements Dao<Customer> {
     var sql = "SELECT * from customers";
     dbClient.executeQuery(sql, rs -> {
       try {
-        customers.add(resultSetToCustomer(rs));
+        while(rs.next()) {
+          customers.add(resultSetToCustomer(rs));
+        }
       } catch (SQLException e) {
         e.printStackTrace();
       }
@@ -92,7 +94,12 @@ public class CustomerDao implements Dao<Customer> {
 
   @Override
   public boolean delete(Customer cx) {
-    var sql = String.format("DELETE FROM customers WHERE id=%d", cx.getId());
+    return deleteById(cx.getId());
+  }
+
+    @Override
+  public boolean deleteById(Integer id) {
+    var sql = String.format("DELETE FROM customers WHERE id=%d", id);
 
     return dbClient.executeUpdate(sql) == 1;
   }
@@ -104,7 +111,8 @@ public class CustomerDao implements Dao<Customer> {
     var sql = String.format("SELECT * FROM customers WHERE id=%d", id);
     dbClient.executeQuery(sql, rs -> {
       try {
-        rs.next();
+        if (!rs.next())
+          return;
         customers.add(resultSetToCustomer(rs));
       } catch (SQLException e) {
         e.printStackTrace();
