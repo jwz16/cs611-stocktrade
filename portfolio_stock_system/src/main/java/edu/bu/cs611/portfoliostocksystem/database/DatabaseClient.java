@@ -21,11 +21,18 @@ public class DatabaseClient {
   private static Logger logger = LogManager.getLogger();
 
   private static final String DB_DIR = "data";
+
   private static final String PROD_DB_FILE_NAME = "portfolio_stock_sys_prod.db";
   public static final String PROD_DB_FILE_PATH = DB_DIR + "/" + PROD_DB_FILE_NAME;
   private static final String PROD_DB_URL = "jdbc:sqlite:" + PROD_DB_FILE_PATH;
   private static final String PROD_DB_USER = "admin";
   private static final String PROD_DB_PASS = "cs611fall2023";
+
+  private static final String TEST_DB_FILE_NAME = "portfolio_stock_sys_test.db";
+  public static final String TEST_DB_FILE_PATH = DB_DIR + "/" + TEST_DB_FILE_NAME;
+  private static final String TEST_DB_URL = "jdbc:sqlite:" + TEST_DB_FILE_PATH;
+  private static final String TEST_DB_USER = "admin";
+  private static final String TEST_DB_PASS = "cs611fall2023";
 
   public static final String TBL_CUSTOMERS = "customers";
   public static final String TBL_MANAGERS = "managers";
@@ -36,15 +43,27 @@ public class DatabaseClient {
   public static final String TBL_CX_TRADE_ORDERS = "customer_trade_orders";
   public static final String TBL_CX_OWNED_SECURITIES = "customer_owned_securities";
 
+  private boolean testMode = false;
+
   public interface QueryResultSetHandler {
     public void handleResultSet(ResultSet rs);
   }
 
-  public static boolean initDatabase() {
-    return initDatabase(PROD_DB_URL, PROD_DB_USER, PROD_DB_PASS);
+  public DatabaseClient() { /* EMPTY CONSTRUCTOR */ }
+
+  public DatabaseClient(boolean testMode) {
+    this.testMode = testMode;
   }
 
-  public static boolean initDatabase(String url, String user, String pass) {
+  public boolean initDatabase() {
+    if (testMode) {
+      return initDatabase(TEST_DB_URL, TEST_DB_USER, TEST_DB_PASS);
+    } else {
+      return initDatabase(PROD_DB_URL, PROD_DB_USER, PROD_DB_PASS);
+    }
+  }
+
+  public boolean initDatabase(String url, String user, String pass) {
     Connection conn = null;
     boolean success = false;
     try {
@@ -76,7 +95,7 @@ public class DatabaseClient {
     return success;
   }
 
-  public static Connection getConnection(String url, String user, String pass) {
+  public Connection getConnection(String url, String user, String pass) {
     try {
       return DriverManager.getConnection(url, user, pass);
     } catch (SQLException e) {
@@ -86,11 +105,15 @@ public class DatabaseClient {
     return null; 
   }
 
-  public static Connection getConnection() {
-    return getConnection(PROD_DB_URL, PROD_DB_USER, PROD_DB_PASS);
+  public Connection getConnection() {
+    if (testMode) {
+      return getConnection(TEST_DB_URL, TEST_DB_USER, TEST_DB_PASS);
+    } else {
+      return getConnection(PROD_DB_URL, PROD_DB_USER, PROD_DB_PASS);
+    }
   }
 
-  private static boolean initTables(String url, String user, String pass) {
+  private boolean initTables(String url, String user, String pass) {
     logger.info("Initializing database tables ...");
     
     Connection conn = null;
@@ -131,15 +154,23 @@ public class DatabaseClient {
     return success;
   }
 
-  public static int executeUpdate(String sql) {
-    return executeUpdate(sql, PROD_DB_URL, PROD_DB_USER, PROD_DB_PASS);
+  public int executeUpdate(String sql) {
+    if (testMode) {
+      return executeUpdate(sql, TEST_DB_URL, TEST_DB_USER, TEST_DB_PASS);
+    } else {
+      return executeUpdate(sql, PROD_DB_URL, PROD_DB_USER, PROD_DB_PASS);
+    }
   }
 
-  public static void executeQuery(String sql, QueryResultSetHandler handler) {
-    executeQuery(sql, PROD_DB_URL, PROD_DB_USER, PROD_DB_PASS, handler);
+  public void executeQuery(String sql, QueryResultSetHandler handler) {
+    if (testMode) {
+      executeQuery(sql, TEST_DB_URL, TEST_DB_USER, TEST_DB_PASS, handler);
+    } else {
+      executeQuery(sql, PROD_DB_URL, PROD_DB_USER, PROD_DB_PASS, handler);
+    }
   }
 
-  public static int executeUpdate(String sql, String url, String user, String pass) {
+  public int executeUpdate(String sql, String url, String user, String pass) {
     Connection conn = null;
     int affectedRows = 0;
     try {
@@ -168,7 +199,7 @@ public class DatabaseClient {
     return affectedRows;
   }
 
-  public static boolean executeQuery(String sql, String url, String user, String pass, QueryResultSetHandler handler) {
+  public boolean executeQuery(String sql, String url, String user, String pass, QueryResultSetHandler handler) {
     Connection conn = null;
     boolean success = false;
     try {
@@ -196,6 +227,14 @@ public class DatabaseClient {
     }
 
     return success;
+  }
+
+  public boolean isTestMode() {
+    return testMode;
+  }
+
+  public void setTestMode(boolean testMode) {
+    this.testMode = testMode;
   }
 
 }
