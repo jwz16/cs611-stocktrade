@@ -26,4 +26,6 @@ replay_pid*
 
 .vscode
 .idea
-portfolio_stock_sys.db
+
+# SQLite DB files
+*.db
