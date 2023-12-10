@@ -6,11 +6,11 @@ CREATE TABLE IF NOT EXISTS
         first_name VARCHAR(64) NOT NULL,
         last_name VARCHAR(64) NOT NULL,
         username VARCHAR(32) NOT NULL,
-        email VARCHAR(320) NOT NULL,
+        email VARCHAR(320) NOT NULL UNIQUE,
         date_of_birth CHAR(10) NOT NULL,
         ssn INT NOT NULL,
-        password_hash TEXT NOT NULL,
-        status CHAR(16) NOT NULL
+        customer_status CHAR(16) NOT NULL,
+        password_hash TEXT NOT NULL
     );
 
 CREATE TABLE IF NOT EXISTS
@@ -19,7 +19,7 @@ CREATE TABLE IF NOT EXISTS
         first_name VARCHAR(64) NOT NULL,
         last_name VARCHAR(64) NOT NULL,
         username VARCHAR(32) NOT NULL,
-        email VARCHAR(320) NOT NULL,
+        email VARCHAR(320) NOT NULL UNIQUE,
         date_of_birth CHAR(10) NOT NULL,
         password_hash TEXT NOT NULL
     );
@@ -40,8 +40,8 @@ CREATE TABLE IF NOT EXISTS
     customer_personal_accounts (
         id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
         customer_id INT NOT NULL,
-        account_name VARCHAR(64) NOT NULL,
-        account_number BIGINT NOT NULL,
+        account_name VARCHAR(64) NOT NULL UNIQUE,
+        account_number BIGINT NOT NULL UNIQUE,
         routing_number BIGINT NOT NULL,
         FOREIGN KEY(customer_id) REFERENCES customers(id)
     );
@@ -50,8 +50,8 @@ CREATE TABLE IF NOT EXISTS
     customer_trading_accounts (
         id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
         customer_id INT NOT NULL,
-        account_name VARCHAR(64) NOT NULL,
-        account_number BIGINT NOT NULL,
+        account_name VARCHAR(64) NOT NULL UNIQUE,
+        account_number BIGINT NOT NULL UNIQUE,
         total_value NUMERIC NOT NULL,
         cash NUMERIC NOT NULL,
         investment_value NUMERIC NOT NULL,
@@ -77,7 +77,7 @@ CREATE TABLE IF NOT EXISTS
 		id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
 		security_id INT NOT NULL,
 		customer_trading_account_id INT NOT NULL,
-		trade_shares BIGINT NOT NULL,
+		trade_quantity BIGINT NOT NULL,
 		trade_price DOUBLE PRECISION NOT NULL,
 		trade_type CHAR(4) CHECK(
             trade_type IN ('BUY', 'SELL')
@@ -96,7 +96,7 @@ CREATE TABLE IF NOT EXISTS
 		id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
 		security_id INT NOT NULL,
 		customer_trading_account_id INT NOT NULL,
-		quantities BIGINT NOT NULL,
+		quantity BIGINT NOT NULL,
 		bought_price DOUBLE PRECISION NOT NULL,
 		bought_at TIMESTAMP NOT NULL,
 		FOREIGN KEY(security_id) REFERENCES securities(id),
