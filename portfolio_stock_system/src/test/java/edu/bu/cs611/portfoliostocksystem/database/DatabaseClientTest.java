@@ -79,13 +79,8 @@ public class DatabaseClientTest {
 
     List<String> tables = new ArrayList<>();
     executeQuery(sql, rs -> {
-      try {
-        while (rs.next()) {
-          tables.add(rs.getString("name"));
-        }
-      } catch (SQLException e) {
-        e.printStackTrace();
-        assertTrue(false);
+      while (rs.next()) {
+        tables.add(rs.getString("name"));
       }
     });
 
@@ -117,25 +112,20 @@ public class DatabaseClientTest {
     var sql = "INSERT INTO securities VALUES(NULL, 'GOOGL', 'Alphabet Inc Class A', 'STOCK', 134.99, TRUE)";
     int affectedRows = executeUpdate(sql);
 
-    assertEquals(affectedRows, 1);
-    
+    assertEquals(1, affectedRows);
+
     sql = "SELECT symbol from securities WHERE symbol='GOOGL'";
     List<String> gotSymbols = new ArrayList<>();
     executeQuery(sql, rs -> {
-      try {
-        rs.next();
-        gotSymbols.add(rs.getString("symbol"));
-      } catch (SQLException e) {
-        e.printStackTrace();
-        assertTrue(false);
-      }
+      rs.next();
+      gotSymbols.add(rs.getString("symbol"));
     });
 
-    assertEquals(gotSymbols.size(), 1);
-    
+    assertEquals(1, gotSymbols.size());
+
     var gotSymbol = gotSymbols.get(0);
     var wantSymbol = "GOOGL";
-    assertEquals(gotSymbol, wantSymbol);
+    assertEquals(wantSymbol, gotSymbol);
   }
 
 }
