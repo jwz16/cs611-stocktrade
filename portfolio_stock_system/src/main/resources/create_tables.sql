@@ -68,7 +68,7 @@ CREATE TABLE IF NOT EXISTS
         id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
         customer_id INT NOT NULL,
         message TEXT NOT NULL,
-		sent_at TIMESTAMP NOT NULL,
+		sent_at DATETIME NOT NULL,
         FOREIGN KEY(customer_id) REFERENCES customers(id)
     );
 
@@ -85,8 +85,8 @@ CREATE TABLE IF NOT EXISTS
 		trade_status CHAR(16) CHECK(
             trade_status IN ('PENDING', 'OPEN', 'EXECUTED', 'CANCELED')
         ) NOT NULL,
-		trade_start_at TIMESTAMP NOT NULL,
-		trade_finish_at TIMESTAMP,
+		trade_start_at DATETIME NOT NULL,
+		trade_finish_at DATETIME,
 		FOREIGN KEY(security_id) REFERENCES securities(id),
 		FOREIGN KEY(customer_trading_account_id) REFERENCES customer_trading_accounts(id)
 	);
@@ -98,7 +98,7 @@ CREATE TABLE IF NOT EXISTS
 		customer_trading_account_id INT NOT NULL,
 		quantity BIGINT NOT NULL,
 		bought_price DOUBLE PRECISION NOT NULL,
-		bought_at TIMESTAMP NOT NULL,
+		bought_at DATETIME NOT NULL,
 		FOREIGN KEY(security_id) REFERENCES securities(id),
 		FOREIGN KEY(customer_trading_account_id) REFERENCES customer_trading_accounts(id)
 	)
