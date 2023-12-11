@@ -3,15 +3,16 @@ package edu.bu.cs611.portfoliostocksystem.model;
 public class CustomerPersonalAccount implements BaseModel {
 
   private Integer id;
+  private Integer customerId;
   private String accountName;
   private Long accountNumber;
   private Long routingNumber;
 
-  public CustomerPersonalAccount(String accountName, Long accountNumber, Long routingNumber) {
-    this(-1, accountName, accountNumber, routingNumber);
+  public CustomerPersonalAccount(Integer customerId, String accountName, Long accountNumber, Long routingNumber) {
+    this(-1, customerId, accountName, accountNumber, routingNumber);
   }
 
-  public CustomerPersonalAccount(Integer id, String accountName, Long accountNumber, Long routingNumber) {
+  public CustomerPersonalAccount(Integer id, Integer customerId, String accountName, Long accountNumber, Long routingNumber) {
     this.id = id;
     this.accountName = accountName;
     this.accountNumber = accountNumber;
@@ -25,6 +26,12 @@ public class CustomerPersonalAccount implements BaseModel {
   }
   public void setId(Integer id) {
     this.id = id;
+  }
+  public Integer getCustomerId() {
+    return customerId;
+  }
+  public void setCustomerId(Integer customerId) {
+    this.customerId = customerId;
   }
   public String getAccountName() {
     return accountName;
@@ -44,6 +51,5 @@ public class CustomerPersonalAccount implements BaseModel {
   public void setRoutingNumber(Long routingNumber) {
     this.routingNumber = routingNumber;
   }
-
   
 }
