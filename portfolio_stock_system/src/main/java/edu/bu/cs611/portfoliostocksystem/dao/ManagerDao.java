@@ -34,21 +34,16 @@ public class ManagerDao extends Dao<Manager> {
       mgr.getPasswordHash()
     );
 
-    if (dbClient.executeUpdate(sql) == 1) {
-      sql = String.format("SELECT id FROM %s WHERE email='%s'", TABLE_NAME, mgr.getEmail());
-      dbClient.executeQuery(sql, rs -> {
-        try {
-          rs.next();
-          mgr.setId(rs.getInt("id"));
-        } catch (SQLException e) {
-          e.printStackTrace();
-        }
-      });
+    var affectedRows = dbClient.executeUpdate(sql, stmt -> {
+      var genKeys = stmt.executeQuery("SELECT last_insert_rowid()");
+      if (genKeys.next()) {
+        mgr.setId(genKeys.getInt(1));
+      }
+    });
 
-      return true;
-    }
+    logger.info("Added a new manager: " + mgr.getUsername());
 
-    return false;
+    return affectedRows == 1;
   }
 
   @Override
@@ -65,12 +60,9 @@ public class ManagerDao extends Dao<Manager> {
       mgr.getId()
     );
 
-    return dbClient.executeUpdate(sql) == 1;
-  }
+    logger.info("Updated the manager " + mgr.getUsername());
 
-  @Override
-  public boolean delete(Manager mgr) {
-    return deleteById(mgr.getId());
+    return dbClient.executeUpdate(sql) == 1;
   }
 
   protected Manager fromResultSet(ResultSet rs) throws SQLException {

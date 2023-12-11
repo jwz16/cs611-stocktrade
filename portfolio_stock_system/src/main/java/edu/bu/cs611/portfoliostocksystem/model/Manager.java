@@ -1,6 +1,6 @@
 package edu.bu.cs611.portfoliostocksystem.model;
 
-public class Manager {
+public class Manager implements BaseModel  {
   
   private Integer id;
   private String firstName;
@@ -36,6 +36,7 @@ public class Manager {
   }
 
   /* Getters and Setters */
+  @Override
   public Integer getId() {
     return id;
   }

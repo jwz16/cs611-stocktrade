@@ -1,6 +1,6 @@
 package edu.bu.cs611.portfoliostocksystem.model;
 
-public class Customer {
+public class Customer implements BaseModel {
 
   public enum Status {
     PENDING,
@@ -56,6 +56,7 @@ public class Customer {
   }
 
   /* Getters and Setters */
+  @Override
   public Integer getId() {
     return id;
   }

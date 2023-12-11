@@ -2,7 +2,7 @@ package edu.bu.cs611.portfoliostocksystem.model;
 
 import java.sql.Timestamp;
 
-public class CustomerMessage {
+public class CustomerMessage implements BaseModel {
   
   private Integer id;
   private Integer customerId;
@@ -25,6 +25,7 @@ public class CustomerMessage {
   }
 
   /* Gettters and Setters */
+  @Override
   public Integer getId() {
     return id;
   }

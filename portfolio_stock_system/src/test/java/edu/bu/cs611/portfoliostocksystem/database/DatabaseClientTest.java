@@ -79,13 +79,8 @@ public class DatabaseClientTest {
 
     List<String> tables = new ArrayList<>();
     executeQuery(sql, rs -> {
-      try {
-        while (rs.next()) {
-          tables.add(rs.getString("name"));
-        }
-      } catch (SQLException e) {
-        e.printStackTrace();
-        assertTrue(false);
+      while (rs.next()) {
+        tables.add(rs.getString("name"));
       }
     });
 
@@ -122,13 +117,8 @@ public class DatabaseClientTest {
     sql = "SELECT symbol from securities WHERE symbol='GOOGL'";
     List<String> gotSymbols = new ArrayList<>();
     executeQuery(sql, rs -> {
-      try {
-        rs.next();
-        gotSymbols.add(rs.getString("symbol"));
-      } catch (SQLException e) {
-        e.printStackTrace();
-        assertTrue(false);
-      }
+      rs.next();
+      gotSymbols.add(rs.getString("symbol"));
     });
 
     assertEquals(1, gotSymbols.size());

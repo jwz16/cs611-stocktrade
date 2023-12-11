@@ -1,6 +1,6 @@
 package edu.bu.cs611.portfoliostocksystem.model;
 
-public class Security {
+public class Security implements BaseModel{
   
   public enum Type { STOCK, OPTION }
   
@@ -44,6 +44,7 @@ public class Security {
   }
 
   /* Getter and Setters */
+  @Override
   public Integer getId() {
     return id;
   }

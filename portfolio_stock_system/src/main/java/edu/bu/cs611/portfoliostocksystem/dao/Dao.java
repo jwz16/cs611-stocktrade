@@ -6,8 +6,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import edu.bu.cs611.portfoliostocksystem.database.DatabaseClient;
+import edu.bu.cs611.portfoliostocksystem.model.BaseModel;
 
-public abstract class Dao<T> {
+public abstract class Dao<T extends BaseModel> {
   
   protected DatabaseClient dbClient;
 
@@ -21,7 +22,6 @@ public abstract class Dao<T> {
 
   public abstract boolean add(T t);
   public abstract boolean update(T t);
-  public abstract boolean delete(T t);
   protected abstract T fromResultSet(ResultSet rs) throws SQLException;
   public abstract String tableName();
 
@@ -32,6 +32,10 @@ public abstract class Dao<T> {
       return null;
     
     return items.get(0);
+  }
+
+  public boolean delete(T t) {
+    return deleteById(t.getId());
   }
 
   public boolean deleteById(Integer id) {
@@ -45,12 +49,8 @@ public abstract class Dao<T> {
     var sql = String.format("SELECT * FROM %s", tableName());
 
     dbClient.executeQuery(sql, rs -> {
-      try {
-        while (rs.next()) {
-          items.add(fromResultSet(rs));
-        }
-      } catch (SQLException e) {
-        e.printStackTrace();
+      while (rs.next()) {
+        items.add(fromResultSet(rs));
       }
     });
 
@@ -62,12 +62,8 @@ public abstract class Dao<T> {
     var sql = String.format("SELECT * FROM %s WHERE %s", tableName(), clause);
 
     dbClient.executeQuery(sql, rs -> {
-      try {
-        while (rs.next()) {
-          items.add(fromResultSet(rs));
-        }
-      } catch (SQLException e) {
-        e.printStackTrace();
+      while (rs.next()) {
+        items.add(fromResultSet(rs));
       }
     });
 

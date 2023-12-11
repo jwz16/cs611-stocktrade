@@ -38,11 +38,11 @@ public class DatabaseClient {
   private boolean testMode = false;
 
   public interface QueryResultSetHandler {
-    public void handleResultSet(ResultSet rs);
+    public void handleResultSet(ResultSet rs) throws SQLException;
   }
 
   public interface PostUpdateHandler {
-    public void handlePostUpdate(Statement stmt);
+    public void handlePostUpdate(Statement stmt) throws SQLException;
   }
 
   public DatabaseClient() { /* EMPTY CONSTRUCTOR */ }

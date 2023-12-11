@@ -34,21 +34,16 @@ public class SecurityDao extends Dao<Security> {
       sec.getTradable()
     );
 
-    if (dbClient.executeUpdate(sql) == 1) {
-      sql = String.format("SELECT id FROM %s WHERE symbol='%s'", TABLE_NAME, sec.getSymbol());
-      dbClient.executeQuery(sql, rs -> {
-        try {
-          rs.next();
-          sec.setId(rs.getInt("id"));
-        } catch (SQLException e) {
-          e.printStackTrace();
-        }
-      });
+    var affectedRows = dbClient.executeUpdate(sql, stmt -> {
+      var genKeys = stmt.executeQuery("SELECT last_insert_rowid()");
+      if (genKeys.next()) {
+        sec.setId(genKeys.getInt(1));
+      }
+    });
 
-      return true;
-    }
+    logger.info("Added a new security " + sec.getSymbol());
 
-    return false;
+    return affectedRows == 1;
   }
 
   @Override
@@ -64,12 +59,9 @@ public class SecurityDao extends Dao<Security> {
       sec.getId()
     );
 
-    return dbClient.executeUpdate(sql) == 1;
-  }
+    logger.info("Updated the security " + sec.getSymbol());
 
-  @Override
-  public boolean delete(Security sec) {
-    return deleteById(sec.getId());
+    return dbClient.executeUpdate(sql) == 1;
   }
 
   protected Security fromResultSet(ResultSet rs) throws SQLException {

@@ -37,15 +37,13 @@ public class CustomerDao extends Dao<Customer> {
     );
 
     var affectedRows = dbClient.executeUpdate(sql, stmt -> {
-      try {
-        var genKeys = stmt.executeQuery("SELECT last_insert_rowid()");
-        if (genKeys.next()) {
-          cx.setId(genKeys.getInt(1));
-        }
-      } catch (SQLException e) {
-        e.printStackTrace();
+      var genKeys = stmt.executeQuery("SELECT last_insert_rowid()");
+      if (genKeys.next()) {
+        cx.setId(genKeys.getInt(1));
       }
     });
+
+    logger.info("Added a new customer: " + cx.getUsername());
 
     return affectedRows == 1;
   }
@@ -66,12 +64,9 @@ public class CustomerDao extends Dao<Customer> {
       cx.getId()
     );
 
-    return dbClient.executeUpdate(sql) == 1;
-  }
+    logger.info("Updated the customer " + cx.getUsername());
 
-  @Override
-  public boolean delete(Customer cx) {
-    return deleteById(cx.getId());
+    return dbClient.executeUpdate(sql) == 1;
   }
 
   @Override

@@ -32,27 +32,21 @@ public class CustomerMessageDao extends Dao<CustomerMessage> {
     );
 
     var affectedRows = dbClient.executeUpdate(sql, stmt -> {
-      try {
-        var genKeys = stmt.executeQuery("SELECT last_insert_rowid()");
-        if (genKeys.next()) {
-          cxMsg.setId(genKeys.getInt(1));
-        }
-      } catch (SQLException e) {
-        e.printStackTrace();
+      var genKeys = stmt.executeQuery("SELECT last_insert_rowid()");
+      if (genKeys.next()) {
+        cxMsg.setId(genKeys.getInt(1));
       }
     });
 
     if (affectedRows == 1) {
       sql = String.format("SELECT sent_at FROM %s WHERE id='%s'", TABLE_NAME, cxMsg.getId());
       dbClient.executeQuery(sql, rs -> {
-        try {
-          if (rs.next()) {
-            cxMsg.setSentAt(rs.getTimestamp("sent_at"));
-          }
-        } catch (SQLException e) {
-          e.printStackTrace();
+        if (rs.next()) {
+          cxMsg.setSentAt(rs.getTimestamp("sent_at"));
         }
       });
+
+      logger.info("Added a new customer message, id: " + cxMsg.getId());
 
       return true;
     }
@@ -70,12 +64,9 @@ public class CustomerMessageDao extends Dao<CustomerMessage> {
       cxMsg.getId()
     );
 
-    return dbClient.executeUpdate(sql) == 1;
-  }
+    logger.info("Updated the customer message, id: " + cxMsg.getId());
 
-  @Override
-  public boolean delete(CustomerMessage cxMsg) {
-    return deleteById(cxMsg.getId());
+    return dbClient.executeUpdate(sql) == 1;
   }
 
   @Override
