@@ -25,8 +25,9 @@ public class CustomerPersonalAccountDao extends Dao<CustomerPersonalAccount> {
   @Override
   public boolean add(CustomerPersonalAccount cxPersAcct) {
     var sql = String.format(
-      "INSERT INTO %s VALUES(NULL, '%s', %d, %d)",
+      "INSERT INTO %s VALUES(NULL, %d, '%s', %d, %d)",
       TABLE_NAME,
+      cxPersAcct.getCustomerId(),
       cxPersAcct.getAccountName(),
       cxPersAcct.getAccountNumber(),
       cxPersAcct.getRoutingNumber()
@@ -47,8 +48,9 @@ public class CustomerPersonalAccountDao extends Dao<CustomerPersonalAccount> {
   @Override
   public boolean update(CustomerPersonalAccount cxPersAcct) {
     var sql = String.format(
-      "UPDATE %s SET account_name='%s', account_number=%d, routing_number=%d WHERE id=%d",
+      "UPDATE %s SET customer_id=%d, account_name='%s', account_number=%d, routing_number=%d WHERE id=%d",
       TABLE_NAME,
+      cxPersAcct.getCustomerId(),
       cxPersAcct.getAccountName(),
       cxPersAcct.getAccountNumber(),
       cxPersAcct.getRoutingNumber(),
@@ -63,6 +65,7 @@ public class CustomerPersonalAccountDao extends Dao<CustomerPersonalAccount> {
   @Override
   protected CustomerPersonalAccount fromResultSet(ResultSet rs) throws SQLException {
     return new CustomerPersonalAccount(
+      rs.getInt("customer_id"),
       rs.getString("account_name"),
       rs.getLong("account_number"),
       rs.getLong("routing_number")
