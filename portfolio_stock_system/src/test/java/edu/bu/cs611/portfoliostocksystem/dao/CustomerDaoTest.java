@@ -95,5 +95,25 @@ public class CustomerDaoTest {
     assertEquals("Michael", cxDao.getById(testCustomer.getId()).getFirstName());
     cxDao.delete(testCustomer);
   }
+
+  @Test
+  void testSelectWhere() {
+    var testCustomer1 = new Customer(testCustomer);
+    testCustomer1.setUsername("john001");
+    testCustomer1.setEmail("john001@gmail.com");
+    testCustomer1.setSsn("123123123");
+    cxDao.add(testCustomer1);
+
+    var testCustomer2 = new Customer(testCustomer);
+    testCustomer2.setUsername("john002");
+    testCustomer2.setEmail("john002@gmail.com");
+    testCustomer1.setSsn("456456456");
+    cxDao.add(testCustomer2);
+
+    assertEquals(1, cxDao.selectWhere("username='john002'").size());
+
+    cxDao.delete(testCustomer1);
+    cxDao.delete(testCustomer2);
+  }
   
 }

@@ -87,4 +87,26 @@ public class SecurityDaoTest {
     secDao.delete(testSecurity);
   }
 
+  @Test
+  void testSelectWhere() {
+    var testSecurity1 = new Security(testSecurity);
+    testSecurity1.setSymbol("MSFT");
+    testSecurity1.setSecurityName("Microsoft Corp");
+    testSecurity1.setPrice(373.04);
+    testSecurity1.setTradable(true);
+    secDao.add(testSecurity1);
+
+    var testSecurity2 = new Security(testSecurity);
+    testSecurity2.setSymbol("TSLA");
+    testSecurity2.setSecurityName("Tesla Inc");
+    testSecurity2.setPrice(243.84);
+    testSecurity2.setTradable(false);
+    secDao.add(testSecurity2);
+
+    assertEquals(1, secDao.selectWhere("tradable=0").size());
+
+    secDao.delete(testSecurity1);
+    secDao.delete(testSecurity2);
+  }
+
 }

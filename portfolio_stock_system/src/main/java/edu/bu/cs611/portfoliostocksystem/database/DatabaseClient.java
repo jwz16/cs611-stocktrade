@@ -35,15 +35,6 @@ public class DatabaseClient {
   private static final String TEST_DB_USER = "admin";
   private static final String TEST_DB_PASS = "cs611fall2023";
 
-  public static final String TBL_CUSTOMERS = "customers";
-  public static final String TBL_MANAGERS = "managers";
-  public static final String TBL_SECURITIES = "securities";
-  public static final String TBL_CX_PERSONAL_ACCTS = "customer_personal_accounts";
-  public static final String TBL_CX_TRADING_ACCTS = "customer_trading_accounts";
-  public static final String TBL_CX_MSGS = "customer_messages";
-  public static final String TBL_CX_TRADE_ORDERS = "customer_trade_orders";
-  public static final String TBL_CX_OWNED_SECURITIES = "customer_owned_securities";
-
   private boolean testMode = false;
 
   public interface QueryResultSetHandler {

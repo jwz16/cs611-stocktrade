@@ -2,8 +2,6 @@ package edu.bu.cs611.portfoliostocksystem.dao;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.List;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -11,47 +9,24 @@ import org.apache.logging.log4j.Logger;
 import edu.bu.cs611.portfoliostocksystem.database.DatabaseClient;
 import edu.bu.cs611.portfoliostocksystem.model.CustomerMessage;
 
-public class CustomerMessageDao implements Dao<CustomerMessage> {
+public class CustomerMessageDao extends Dao<CustomerMessage> {
   
   private static Logger logger = LogManager.getLogger();
-
-  protected DatabaseClient dbClient;
+  private static String TABLE_NAME = "customer_messages";
 
   public CustomerMessageDao() {
-    dbClient = new DatabaseClient();
+    super();
   }
 
-  public CustomerMessageDao(DatabaseClient dbClient) {
-    this.dbClient = dbClient;
+  public CustomerMessageDao(DatabaseClient databaseClient) {
+    super(databaseClient);
   }
-
-  @Override
-  public DatabaseClient getDatabaseClient() {
-    return dbClient;
-  }
-
-  @Override
-  public List<CustomerMessage> getAll() {
-    List<CustomerMessage> customerMessages = new ArrayList<>();
-    
-    var sql = "SELECT * from customer_messages";
-    dbClient.executeQuery(sql, rs -> {
-      try {
-        while(rs.next()) {
-          customerMessages.add(resultSetToCustomerMessage(rs));
-        }
-      } catch (SQLException e) {
-        e.printStackTrace();
-      }
-    });
-
-    return customerMessages;
-  }
-
+  
   @Override
   public boolean add(CustomerMessage cxMsg) {
     var sql = String.format(
-      "INSERT INTO customer_messages VALUES(NULL, %d, '%s', datetime('now'))",
+      "INSERT INTO %s VALUES(NULL, %d, '%s', datetime('now'))",
+      TABLE_NAME,
       cxMsg.getCustomerId(),
       cxMsg.getMessage()
     );
@@ -68,7 +43,7 @@ public class CustomerMessageDao implements Dao<CustomerMessage> {
     });
 
     if (affectedRows == 1) {
-      sql = String.format("SELECT sent_at FROM customer_messages WHERE id='%s'", cxMsg.getId());
+      sql = String.format("SELECT sent_at FROM %s WHERE id='%s'", TABLE_NAME, cxMsg.getId());
       dbClient.executeQuery(sql, rs -> {
         try {
           if (rs.next()) {
@@ -88,7 +63,8 @@ public class CustomerMessageDao implements Dao<CustomerMessage> {
   @Override
   public boolean update(CustomerMessage cxMsg) {
     var sql = String.format(
-      "UPDATE customer_messages SET customer_id=%d, message='%s' WHERE id=%d",
+      "UPDATE %s SET customer_id=%d, message='%s' WHERE id=%d",
+      TABLE_NAME,
       cxMsg.getCustomerId(),
       cxMsg.getMessage(),
       cxMsg.getId()
@@ -103,42 +79,18 @@ public class CustomerMessageDao implements Dao<CustomerMessage> {
   }
 
   @Override
-  public boolean deleteById(Integer id) {
-    var sql = String.format("DELETE FROM customer_messages WHERE id=%d", id);
-
-    return dbClient.executeUpdate(sql) == 1;
-  }
-
-  @Override
-  public CustomerMessage getById(Integer id) {
-    List<CustomerMessage> customerMessages = new ArrayList<>();
-
-    var sql = String.format("SELECT * FROM customer_messages WHERE id=%d", id);
-    dbClient.executeQuery(sql, rs -> {
-      try {
-        if (!rs.next())
-          return;
-        customerMessages.add(resultSetToCustomerMessage(rs));
-      } catch (SQLException e) {
-        e.printStackTrace();
-      }
-    });
-
-    if (customerMessages.size() != 1) {
-      logger.error("getById should return exactly one result but got " + customerMessages.size() + " results!");
-      return null;
-    }
-    
-    return customerMessages.get(0);
-  }
-
-  private CustomerMessage resultSetToCustomerMessage(ResultSet rs) throws SQLException {
+  protected CustomerMessage fromResultSet(ResultSet rs) throws SQLException {
     return new CustomerMessage(
       rs.getInt("id"),
       rs.getInt("customer_id"),
       rs.getString("message"),
       rs.getTimestamp("sent_at")
     );
+  }
+
+  @Override
+  public String tableName() {
+    return TABLE_NAME;
   }
 
 }

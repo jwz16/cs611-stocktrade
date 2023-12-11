@@ -92,4 +92,22 @@ public class ManagerDaoTest {
     mgrDao.delete(testManager);
   }
 
+  @Test
+  void testSelectWhere() {
+    var testManager1 = new Manager(testManager);
+    testManager1.setUsername("john001");
+    testManager1.setEmail("john001@gmail.com");
+    mgrDao.add(testManager1);
+
+    var testManager2 = new Manager(testManager);
+    testManager2.setUsername("john002");
+    testManager2.setEmail("john002@gmail.com");
+    mgrDao.add(testManager2);
+
+    assertEquals(1, mgrDao.selectWhere("username='john002'").size());
+
+    mgrDao.delete(testManager1);
+    mgrDao.delete(testManager2);
+  }
+
 }

@@ -131,4 +131,27 @@ public class CustomerMessageDaoTest {
     cxDao.delete(testCustomer);
     cxMsgDao.delete(testCxMsg);
   }
+
+  @Test
+  void testSelectWhere() {
+    cxDao.add(testCustomer);
+    testCxMsg.setCustomerId(testCustomer.getId());
+
+    var wantMsg = "Hello John, would you like to open a derivative trading account?";
+
+    var testCxMsg1 = new CustomerMessage(testCxMsg);
+    testCxMsg1.setMessage("Hello John, would you like to open a derivative trading account?");
+    cxMsgDao.add(testCxMsg1);
+
+    var testCxMsg2 = new CustomerMessage(testCxMsg);
+    testCxMsg1.setMessage("Hello John, welcome to Portfolio Stock System");
+    cxMsgDao.add(testCxMsg2);
+
+    assertEquals(1, cxMsgDao.selectWhere(String.format("message='%s'", wantMsg)).size());
+    
+    cxDao.delete(testCustomer);
+    cxMsgDao.delete(testCxMsg1);
+    cxMsgDao.delete(testCxMsg2);
+  }
+
 }
