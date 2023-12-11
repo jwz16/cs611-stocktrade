@@ -90,7 +90,7 @@ public class CustomerDaoTest {
     cxDao.add(testCustomer);
 
     testCustomer.setFirstName("Michael");
-    cxDao.update(testCustomer);
+    assertTrue(cxDao.update(testCustomer));
 
     assertEquals("Michael", cxDao.getById(testCustomer.getId()).getFirstName());
     cxDao.delete(testCustomer);

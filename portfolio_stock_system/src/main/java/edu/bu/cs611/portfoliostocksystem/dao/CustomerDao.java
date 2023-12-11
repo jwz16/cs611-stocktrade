@@ -57,21 +57,18 @@ public class CustomerDao implements Dao<Customer> {
       cx.getPasswordHash()
     );
 
-    if (dbClient.executeUpdate(sql) == 1) {
-      sql = String.format("SELECT id FROM customers WHERE email='%s'", cx.getEmail());
-      dbClient.executeQuery(sql, rs -> {
-        try {
-          rs.next();
-          cx.setId(rs.getInt("id"));
-        } catch (SQLException e) {
-          e.printStackTrace();
+    var affectedRows = dbClient.executeUpdate(sql, stmt -> {
+      try {
+        var genKeys = stmt.executeQuery("SELECT last_insert_rowid()");
+        if (genKeys.next()) {
+          cx.setId(genKeys.getInt(1));
         }
-      });
+      } catch (SQLException e) {
+        e.printStackTrace();
+      }
+    });
 
-      return true;
-    }
-
-    return false;
+    return affectedRows == 1;
   }
 
   @Override

@@ -7,6 +7,7 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 
 import org.apache.commons.io.IOUtils;
 import org.apache.logging.log4j.LogManager;
@@ -47,6 +48,10 @@ public class DatabaseClient {
 
   public interface QueryResultSetHandler {
     public void handleResultSet(ResultSet rs);
+  }
+
+  public interface PostUpdateHandler {
+    public void handlePostUpdate(Statement stmt);
   }
 
   public DatabaseClient() { /* EMPTY CONSTRUCTOR */ }
@@ -155,10 +160,14 @@ public class DatabaseClient {
   }
 
   public int executeUpdate(String sql) {
+    return executeUpdate(sql, null);
+  }
+
+  public int executeUpdate(String sql, PostUpdateHandler handler) {
     if (testMode) {
-      return executeUpdate(sql, TEST_DB_URL, TEST_DB_USER, TEST_DB_PASS);
+      return executeUpdate(sql, TEST_DB_URL, TEST_DB_USER, TEST_DB_PASS, handler);
     } else {
-      return executeUpdate(sql, PROD_DB_URL, PROD_DB_USER, PROD_DB_PASS);
+      return executeUpdate(sql, PROD_DB_URL, PROD_DB_USER, PROD_DB_PASS, handler);
     }
   }
 
@@ -170,7 +179,7 @@ public class DatabaseClient {
     }
   }
 
-  public int executeUpdate(String sql, String url, String user, String pass) {
+  public int executeUpdate(String sql, String url, String user, String pass, PostUpdateHandler handler) {
     Connection conn = null;
     int affectedRows = 0;
     try {
@@ -184,6 +193,9 @@ public class DatabaseClient {
       stmt.setQueryTimeout(5);
 
       affectedRows = stmt.executeUpdate(sql);
+
+      if (handler != null)
+        handler.handlePostUpdate(stmt);
     } catch (SQLException e) {
       logger.error(e.getMessage());
     } finally {
@@ -212,7 +224,8 @@ public class DatabaseClient {
       var stmt = conn.createStatement();
       stmt.setQueryTimeout(5);
 
-      handler.handleResultSet(stmt.executeQuery(sql));
+      if (handler != null)
+        handler.handleResultSet(stmt.executeQuery(sql));
       success = true;
     } catch (SQLException e) {
       logger.error(e.getMessage());
