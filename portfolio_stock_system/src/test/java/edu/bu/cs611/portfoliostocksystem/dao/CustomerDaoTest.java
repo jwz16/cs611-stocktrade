@@ -26,7 +26,6 @@ public class CustomerDaoTest {
     cxDao = new CustomerDao(new DatabaseClient(true));
 
     testCustomer = new Customer(
-      -1,
       "John", "Anderson",
       "john001",
       "john001@gmail.com",
@@ -60,20 +59,22 @@ public class CustomerDaoTest {
 
   @Test
   void testGetAll() {
-    testCustomer.setUsername("john001");
-    testCustomer.setEmail("john001@gmail.com");
-    cxDao.add(testCustomer);
-    Integer cxId1 = testCustomer.getId();
+    var testCustomer1 = new Customer(testCustomer);
+    testCustomer1.setUsername("john001");
+    testCustomer1.setEmail("john001@gmail.com");
+    testCustomer1.setSsn("123123123");
+    cxDao.add(testCustomer1);
 
-    testCustomer.setUsername("john002");
-    testCustomer.setEmail("john002@gmail.com");
-    cxDao.add(testCustomer);
-    Integer cxId2 = testCustomer.getId();
+    var testCustomer2 = new Customer(testCustomer);
+    testCustomer2.setUsername("john002");
+    testCustomer2.setEmail("john002@gmail.com");
+    testCustomer1.setSsn("456456456");
+    cxDao.add(testCustomer2);
 
-    assertEquals(cxDao.getAll().size(), 2);
+    assertEquals(2, cxDao.getAll().size());
 
-    assertTrue(cxDao.deleteById(cxId1));
-    assertTrue(cxDao.deleteById(cxId2));
+    assertTrue(cxDao.delete(testCustomer1));
+    assertTrue(cxDao.delete(testCustomer2));
   }
 
   @Test
@@ -91,7 +92,7 @@ public class CustomerDaoTest {
     testCustomer.setFirstName("Michael");
     cxDao.update(testCustomer);
 
-    assertEquals(cxDao.getById(testCustomer.getId()).getFirstName(), "Michael");
+    assertEquals("Michael", cxDao.getById(testCustomer.getId()).getFirstName());
     cxDao.delete(testCustomer);
   }
   

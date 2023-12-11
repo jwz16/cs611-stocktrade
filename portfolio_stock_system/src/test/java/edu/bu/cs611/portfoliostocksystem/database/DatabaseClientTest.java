@@ -117,8 +117,8 @@ public class DatabaseClientTest {
     var sql = "INSERT INTO securities VALUES(NULL, 'GOOGL', 'Alphabet Inc Class A', 'STOCK', 134.99, TRUE)";
     int affectedRows = executeUpdate(sql);
 
-    assertEquals(affectedRows, 1);
-    
+    assertEquals(1, affectedRows);
+
     sql = "SELECT symbol from securities WHERE symbol='GOOGL'";
     List<String> gotSymbols = new ArrayList<>();
     executeQuery(sql, rs -> {
@@ -131,11 +131,11 @@ public class DatabaseClientTest {
       }
     });
 
-    assertEquals(gotSymbols.size(), 1);
-    
+    assertEquals(1, gotSymbols.size());
+
     var gotSymbol = gotSymbols.get(0);
     var wantSymbol = "GOOGL";
-    assertEquals(gotSymbol, wantSymbol);
+    assertEquals(wantSymbol, gotSymbol);
   }
 
 }

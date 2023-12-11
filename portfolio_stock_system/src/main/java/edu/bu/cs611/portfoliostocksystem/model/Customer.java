@@ -18,6 +18,14 @@ public class Customer {
   private Status status;
   private String passwordHash;
 
+  public Customer(String firstName, String lastName, String username, String email, String dateOfBirth, String ssn, String status, String passwordHash) {
+    this(firstName, lastName, username, email, dateOfBirth, ssn, Status.valueOf(status), passwordHash);
+  }
+
+  public Customer(String firstName, String lastName, String username, String email, String dateOfBirth, String ssn, Status status, String passwordHash) {
+    this(-1, firstName, lastName, username, email, dateOfBirth, ssn, status, passwordHash);
+  }
+
   public Customer(Integer id, String firstName, String lastName, String username, String email, String dateOfBirth, String ssn, String status, String passwordHash) {
     this(id, firstName, lastName, username, email, dateOfBirth, ssn, Status.valueOf(status), passwordHash);
   }
@@ -32,6 +40,19 @@ public class Customer {
     this.ssn = ssn;
     this.status = status;
     this.passwordHash = passwordHash;
+  }
+
+  public Customer(Customer cx) {
+    this(
+      cx.getFirstName(),
+      cx.getLastName(),
+      cx.getUsername(),
+      cx.getEmail(),
+      cx.getDateOfBirth(),
+      cx.getSsn(),
+      cx.getStatus(),
+      cx.getPasswordHash()
+    );
   }
 
   /* Getters and Setters */
