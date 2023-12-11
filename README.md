@@ -1,5 +1,10 @@
 # CS611 Portfolio Stock System
 
+## GUI Design
+
+### Tool
+[Netbeans](https://netbeans.apache.org/)
+
 ## Build
 ### Prerequisites
 * JDK 17 installed.
