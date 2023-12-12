@@ -40,7 +40,7 @@ CREATE TABLE IF NOT EXISTS
     customer_personal_accounts (
         id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
         customer_id INT NOT NULL,
-        account_name VARCHAR(64) NOT NULL UNIQUE,
+        account_name VARCHAR(64) NOT NULL,
         account_number BIGINT NOT NULL UNIQUE,
         routing_number BIGINT NOT NULL,
         FOREIGN KEY(customer_id) REFERENCES customers(id)
@@ -50,7 +50,7 @@ CREATE TABLE IF NOT EXISTS
     customer_trading_accounts (
         id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
         customer_id INT NOT NULL,
-        account_name VARCHAR(64) NOT NULL UNIQUE,
+        account_name VARCHAR(64) NOT NULL,
         account_number BIGINT NOT NULL UNIQUE,
         total_value NUMERIC NOT NULL,
         cash NUMERIC NOT NULL,
