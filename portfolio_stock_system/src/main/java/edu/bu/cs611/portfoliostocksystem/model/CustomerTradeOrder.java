@@ -2,7 +2,7 @@ package edu.bu.cs611.portfoliostocksystem.model;
 
 import java.sql.Timestamp;
 
-public class CustomerTradeOrder implements BaseModel {
+public class CustomerTradeOrder extends AbstractModel {
   
   public enum Type { BUY, SELL }
   public enum Status { PENDING, OPEN, EXECUTED, CANCELED }
