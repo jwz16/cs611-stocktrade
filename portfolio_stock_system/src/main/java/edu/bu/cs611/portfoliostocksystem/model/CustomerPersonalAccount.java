@@ -1,6 +1,6 @@
 package edu.bu.cs611.portfoliostocksystem.model;
 
-public class CustomerPersonalAccount implements BaseModel {
+public class CustomerPersonalAccount extends AbstractModel {
 
   private Integer id;
   private String accountName;

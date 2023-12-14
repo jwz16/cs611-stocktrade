@@ -1,6 +1,6 @@
 package edu.bu.cs611.portfoliostocksystem.model;
 
-public class Customer implements BaseModel {
+public class Customer extends User {
 
   public enum Status {
     PENDING,
@@ -8,15 +8,10 @@ public class Customer implements BaseModel {
     DENIED
   }
   
-  private Integer id;
-  private String firstName;
-  private String lastName;
-  private String username;
-  private String email;
-  private String dateOfBirth;
-  private String ssn;
-  private Status status;
-  private String passwordHash;
+  protected String ssn;
+  protected Status status;
+  
+  public Customer() {}
 
   public Customer(String firstName, String lastName, String username, String email, String dateOfBirth, String ssn, String status, String passwordHash) {
     this(firstName, lastName, username, email, dateOfBirth, ssn, Status.valueOf(status), passwordHash);
@@ -56,43 +51,6 @@ public class Customer implements BaseModel {
   }
 
   /* Getters and Setters */
-  @Override
-  public Integer getId() {
-    return id;
-  }
-  public void setId(Integer id) {
-    this.id = id;
-  }
-  public String getFirstName() {
-    return firstName;
-  }
-  public void setFirstName(String firstName) {
-    this.firstName = firstName;
-  }
-  public String getLastName() {
-    return lastName;
-  }
-  public void setLastName(String lastName) {
-    this.lastName = lastName;
-  }
-  public String getUsername() {
-    return username;
-  }
-  public void setUsername(String username) {
-    this.username = username;
-  }
-  public String getEmail() {
-    return email;
-  }
-  public void setEmail(String email) {
-    this.email = email;
-  }
-  public String getDateOfBirth() {
-    return dateOfBirth;
-  }
-  public void setDateOfBirth(String dateOfBirth) {
-    this.dateOfBirth = dateOfBirth;
-  }
   public String getSsn() {
     return ssn;
   }
@@ -104,12 +62,6 @@ public class Customer implements BaseModel {
   }
   public void setStatus(Status status) {
     this.status = status;
-  }
-  public String getPasswordHash() {
-    return passwordHash;
-  }
-  public void setPasswordHash(String passwordHash) {
-    this.passwordHash = passwordHash;
   }
 
 }

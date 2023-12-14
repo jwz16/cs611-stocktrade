@@ -2,7 +2,7 @@ package edu.bu.cs611.portfoliostocksystem.model;
 
 import java.sql.Timestamp;
 
-public class CustomerOwnedSecurity implements BaseModel {
+public class CustomerOwnedSecurity extends AbstractModel {
 
   private Integer id;
   private Integer securityId;

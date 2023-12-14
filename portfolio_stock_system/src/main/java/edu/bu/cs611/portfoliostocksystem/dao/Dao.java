@@ -6,9 +6,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import edu.bu.cs611.portfoliostocksystem.database.DatabaseClient;
-import edu.bu.cs611.portfoliostocksystem.model.BaseModel;
+import edu.bu.cs611.portfoliostocksystem.model.AbstractModel;
 
-public abstract class Dao<T extends BaseModel> {
+public abstract class Dao<T extends AbstractModel> {
   
   protected DatabaseClient dbClient;
 
@@ -68,6 +68,33 @@ public abstract class Dao<T extends BaseModel> {
     });
 
     return items;
+  }
+
+  public T getBy(String columnName, String columnValue) {
+    var items = selectWhere(String.format("%s='%s'", columnName, columnValue));
+    
+    if (items.isEmpty())
+      return null;
+     
+     return items.get(0);
+  }
+  
+  public T getBy(String columnName, Integer columnValue) {
+    var items = selectWhere(String.format("%s=%d", columnName, columnValue));
+    
+    if (items.isEmpty())
+      return null;
+     
+     return items.get(0);
+  }
+  
+    public T getBy(String columnName, Long columnValue) {
+    var items = selectWhere(String.format("%s=%d", columnName, columnValue));
+    
+    if (items.isEmpty())
+      return null;
+     
+     return items.get(0);
   }
 
 }

@@ -1,6 +1,6 @@
 package edu.bu.cs611.portfoliostocksystem.model;
 
-public class Security implements BaseModel{
+public class Security extends AbstractModel{
   
   public enum Type { STOCK, OPTION }
   

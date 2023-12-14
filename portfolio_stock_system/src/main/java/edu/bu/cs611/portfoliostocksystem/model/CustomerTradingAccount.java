@@ -1,6 +1,6 @@
 package edu.bu.cs611.portfoliostocksystem.model;
 
-public class CustomerTradingAccount implements BaseModel {
+public class CustomerTradingAccount extends AbstractModel {
   
   public enum Status {
     PENDING,
